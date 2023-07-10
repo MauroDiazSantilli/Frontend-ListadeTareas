@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import ListaTareas from './ListaTareas';
 import { obtenerTareas, agregarTarea, eliminarTarea, editarTarea } from './helpers/queries.js';
+import Swal from 'sweetalert2';
 
 const Formulario = () => {
   const [tarea, setTarea] = useState('');
@@ -17,7 +18,7 @@ const Formulario = () => {
       const listaTareas = await obtenerTareas();
       setConjuntoTareas(listaTareas);
     } catch (error) {
-      setError('Error al obtener la lista de tareas. Inténtalo nuevamente.');
+      setError('Error al obtener la lista de tareas. Inténtalo nuevamente.')
       console.error(error);
     }
   };
@@ -27,13 +28,23 @@ const Formulario = () => {
 
     if (tarea.trim() !== '') {
       try {
-        const nuevaTarea = await agregarTarea({ tarea });
+        const nuevaTarea = await agregarTarea({ tarea })
 
         setConjuntoTareas((prevConjuntoTareas) => [...prevConjuntoTareas, nuevaTarea]);
         setTarea('');
+        Swal.fire({
+          icon: 'success',
+          title: 'Éxito',
+          text: 'Tarea agregada exitosamente.',
+        });
       } catch (error) {
-        setError('Error al agregar la tarea. Inténtalo nuevamente.');
+        setError('Error al agregar la tarea. Inténtalo nuevamente.')
         console.error(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error al agregar la tarea. Inténtalo nuevamente.',
+        });
       }
     }
   };
@@ -44,9 +55,19 @@ const Formulario = () => {
       setConjuntoTareas((prevConjuntoTareas) =>
         prevConjuntoTareas.filter((tarea) => tarea._id !== tareaId)
       );
+      Swal.fire({
+        icon: 'success',
+        title: 'Éxito',
+        text: 'Tarea eliminada exitosamente.',
+      });
     } catch (error) {
-      setError('Error al eliminar la tarea. Inténtalo nuevamente.');
+      setError('Error al eliminar la tarea. Inténtalo nuevamente.')
       console.error(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error al eliminar la tarea. Inténtalo nuevamente.',
+      });
     }
   };
 
@@ -56,15 +77,24 @@ const Formulario = () => {
       setConjuntoTareas((prevConjuntoTareas) =>
         prevConjuntoTareas.map((tarea) => (tarea._id === tareaEditada._id ? tareaEditada : tarea))
       );
+      Swal.fire({
+        icon: 'success',
+        title: 'Éxito',
+        text: 'Tarea editada exitosamente.',
+      });
     } catch (error) {
       setError('Error al editar la tarea. Inténtalo nuevamente.');
       console.error(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error al editar la tarea. Inténtalo nuevamente.',
+      });
     }
   };
 
   return (
     <div>
-      {error && <p>{error}</p>}
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3 d-flex" controlId="tarea">
           <Form.Control
@@ -83,4 +113,4 @@ const Formulario = () => {
   );
 };
 
-export default Formulario;
+export default Formulario
