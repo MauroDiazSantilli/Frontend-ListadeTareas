@@ -6,7 +6,7 @@ const ItemTarea = ({ tarea, borrarTarea, editarTarea }) => {
   const [tareaEditada, setTareaEditada] = useState(tarea.tarea);
 
   const eliminarTarea = () => {
-    borrarTarea(tarea);
+    borrarTarea(tarea._id);
   };
 
   const editarDatosTarea = () => {

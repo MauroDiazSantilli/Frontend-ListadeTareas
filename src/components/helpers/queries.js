@@ -1,4 +1,26 @@
-const API_URL = 'http://localhost:3004/tareas';
+const API_URL = import.meta.env.VITE_API_TAREAS;
+
+export const obtenerTareas = async () => {
+  try {
+    const respuesta = await fetch(API_URL);
+    const listadoTareas = await respuesta.json();
+    return listadoTareas;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const obtenerTarea = async (id) => {
+  try {
+    const respuesta = await fetch(`${API_URL}/${id}`);
+    const tarea = await respuesta.json();
+    return tarea;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 
 export const agregarTarea = async (tarea) => {
   try {
@@ -14,13 +36,14 @@ export const agregarTarea = async (tarea) => {
       throw new Error('Error al agregar la tarea');
     }
 
-    const nuevaTarea = await respuesta.json();
+    const nuevaTarea = tarea
     return nuevaTarea;
   } catch (error) {
     console.log(error);
     throw error;
   }
 };
+
 
 export const eliminarTarea = async (tareaId) => {
   try {
@@ -60,4 +83,4 @@ export const editarTarea = async (tareaId, tareaEditada) => {
     console.error(error);
     throw error;
   }
-};
+}
